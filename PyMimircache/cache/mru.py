@@ -54,6 +54,7 @@ class MRU(Cache):
         """
         evict_key = self.find_evict_key()
         del self.cache_dict[evict_key]
+        return evict_key
 
     def access(self, req_item, **kwargs):
         """

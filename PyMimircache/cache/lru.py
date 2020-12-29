@@ -73,6 +73,23 @@ class LRU(Cache):
         req_id = self.cacheline_dict.popitem(last=False)
         return req_id[0]
 
+
+    def evict_item(self, req_item, **kwargs):
+        """
+        evict one cacheline from the  based on key 
+
+        :param **kwargs:
+        :return: None 
+        """
+
+        req_id = req_item
+        if isinstance(req_item, Req):
+            req_id = req_item.item_id
+
+        self.cacheline_dict.move_to_end(req_id, last=False)
+        self.evict()
+
+
     def access(self, req_item, **kwargs):
         """
         request access cache, it updates cache metadata,
