@@ -91,7 +91,6 @@ class ARCAlgTest(unittest.TestCase):
 
         # Setup the cache 
         arc_cache = self.fill_half_t2(arc_cache, cache_size)
-        print(arc_cache.t2.cacheline_dict.items())
         arc_cache = self.add_cache_miss(arc_cache, cache_size, 3)
 
         # Case 2: Item found in B1
@@ -116,6 +115,22 @@ class ARCAlgTest(unittest.TestCase):
         # Setup the cache 
         arc_cache = self.fill_half_t2(arc_cache, cache_size)
         arc_cache = self.add_cache_miss(arc_cache, cache_size, 3)
+
+    def test_pyARC_miss_rate(self):
+        sizes = [5,10,25,20,25,50,100,150,500]
+        for s in sizes:
+            arc_cache = ARC(s)
+            reader = PlainReader("{}/trace.txt".format(DAT_FOLDER))
+            req = reader.read_one_req()
+            hit_count = 0 
+            total_req = 0 
+            while req:
+                if arc_cache.access(req):
+                    hit_count += 1
+                total_req += 1
+                req = reader.read_one_req()
+            
+            print(s, hit_count, total_req, total_req-hit_count, (total_req-hit_count)/total_req)
 
 
     def test_pyARC_plain(self):

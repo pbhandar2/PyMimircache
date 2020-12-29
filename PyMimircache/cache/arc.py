@@ -25,6 +25,7 @@ class InsertEvictLRU(LRU):
         :param **kwargs:
         :param cache_size: 
         """
+        
         super().__init__(cache_size, **kwargs)
 
     def access(self, req_item, **kwargs):
@@ -64,6 +65,7 @@ class HitEvictFIFO(FIFO):
         :param **kwargs:
         :param cache_size: 
         """
+
         super().__init__(cache_size, **kwargs)
 
     def _update(self, req_id, **kwargs):
@@ -73,6 +75,7 @@ class HitEvictFIFO(FIFO):
         :param **kwargs:
         :param req_id: the cache request id 
         """
+
         self.cacheline_dict.move_to_end(req_id, last=False)
         evict_item = self.evict()
         return evict_item 
@@ -114,6 +117,7 @@ class T1(HitEvictFIFO, InsertEvictLRU):
         :param **kwargs:
         :param cache_size: 
         """
+
         HitEvictFIFO.__init__(self, cache_size, **kwargs)
         InsertEvictLRU.__init__(self, cache_size, **kwargs)
 
@@ -133,7 +137,6 @@ class ARC(Cache):
         super().__init__(cache_size, **kwargs)
         self.p = 0
         self._lambda = 1 
-        self.count = 0 # for debug 
         
         if ghostlist_size == -1:
             self.ghostlist_size = self.cache_size/2
@@ -149,6 +152,7 @@ class ARC(Cache):
         :param req_id: the element for search
         :return: whether the request id is in the cache 
         """
+
         if self.t1.has(req_id) or self.t2.has(req_id):
             return True
         else:
@@ -231,6 +235,7 @@ class ARC(Cache):
         :param req_id:
         :return: None 
         """
+
         self.t1._insert(req_id)
 
     def evict(self, **kwargs):
@@ -241,6 +246,7 @@ class ARC(Cache):
         :param: element: the missed request
         :return: content of element evicted into ghost list
         """
+
         pass
 
     def access(self, req_item, **kwargs):
@@ -249,11 +255,6 @@ class ARC(Cache):
         :param req_item: the element in the reference, it can be in the cache, or not
         :return: None
         """
-
-        # make sure the end of file is reached for testing 
-        if self.count > 113870:
-            print("Access {}".format(req_item))
-        self.count += 1
 
         # CASE 1: item is in t1 or t2 (cache hit)
         if self.has(req_item):
