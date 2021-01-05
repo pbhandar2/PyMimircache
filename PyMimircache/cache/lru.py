@@ -17,7 +17,6 @@ class LRU(Cache):
     LRU class for simulating a LRU cache
 
     """
-
     def __init__(self, cache_size, **kwargs):
         super().__init__(cache_size, **kwargs)
         self.cacheline_dict = OrderedDict()
@@ -50,44 +49,42 @@ class LRU(Cache):
 
     def _insert(self, req_item, **kwargs):
         """
-        the given element is not in the cache, now insert it into cache
+        Insert the item into cache 
+
         :param **kwargs:
         :param req_item:
-        :return: evicted element or None
-        """
-
-        req_id = req_item
-        if isinstance(req_item, Req):
-            req_id = req_item.item_id
-
-        self.cacheline_dict[req_id] = True
-
-    def evict(self, **kwargs):
-        """
-        evict one cacheline from the cache
-
-        :param **kwargs:
-        :return: id of evicted cacheline
-        """
-
-        req_id = self.cacheline_dict.popitem(last=False)
-        return req_id[0]
-
-
-    def evict_item(self, req_item, **kwargs):
-        """
-        evict one cacheline from the  based on key 
-
-        :param **kwargs:
         :return: None 
         """
 
         req_id = req_item
         if isinstance(req_item, Req):
             req_id = req_item.item_id
+            self.cacheline_dict[req_id] = req_item
+        else:
+            self.cacheline_dict[req_id] = True
+
+    def evict(self, **kwargs):
+        """
+        evict one cacheline from the cache
+
+        :param **kwargs:
+        :return: evicted item 
+        """
+
+        return self.cacheline_dict.popitem(last=False)
+
+
+    def evict_item(self, req_id, **kwargs):
+        """
+        evict one cacheline from the  based on key 
+
+        :param **kwargs:
+        :param req_id:
+        :return: the evicted item  
+        """
 
         self.cacheline_dict.move_to_end(req_id, last=False)
-        self.evict()
+        return self.evict()
 
 
     def access(self, req_item, **kwargs):
