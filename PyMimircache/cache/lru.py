@@ -2,21 +2,18 @@
 
 """
     This is the new implementation of LRU using OrderedDict, and it is
-    slightly faster than original implementation using home-made LinkedList
-
-
+    slightly faster than original implementation using home-made LinkedList. 
 """
 
 from collections import OrderedDict
 from PyMimircache.cache.abstractCache import Cache
 from PyMimircache.cacheReader.requestItem import Req
 
-
 class LRU(Cache):
     """
     LRU class for simulating a LRU cache
-
     """
+
     def __init__(self, cache_size, **kwargs):
         super().__init__(cache_size, **kwargs)
         self.cacheline_dict = OrderedDict()
@@ -27,6 +24,7 @@ class LRU(Cache):
 
         :return: whether the given element is in the cache
         """
+        
         if req_id in self.cacheline_dict:
             return True
         else:
@@ -73,10 +71,9 @@ class LRU(Cache):
 
         return self.cacheline_dict.popitem(last=False)
 
-
     def evict_item(self, req_id, **kwargs):
         """
-        evict one cacheline from the  based on key 
+        evict one cacheline from the based on key 
 
         :param **kwargs:
         :param req_id:
@@ -85,7 +82,6 @@ class LRU(Cache):
 
         self.cacheline_dict.move_to_end(req_id, last=False)
         return self.evict()
-
 
     def access(self, req_item, **kwargs):
         """
