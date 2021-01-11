@@ -59,8 +59,9 @@ class LRU(Cache):
         req_id = req_item
         if isinstance(req_item, Req):
             req_id = req_item.item_id
-
-        self.cacheline_dict[req_id] = True
+            self.cacheline_dict[req_id] = req_item
+        else:
+            self.cacheline_dict[req_id] = True
 
     def evict(self, **kwargs):
         """
@@ -70,8 +71,8 @@ class LRU(Cache):
         :return: id of evicted cacheline
         """
 
-        req_id = self.cacheline_dict.popitem(last=False)
-        return req_id[0]
+        req_item = self.cacheline_dict.popitem(last=False)
+        return req_item
 
 
     def evict_item(self, req_item, **kwargs):
