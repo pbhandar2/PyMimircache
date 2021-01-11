@@ -11,7 +11,7 @@ class CacheLine:
         self._item_id = item_id
         self._size = size
         self._op = op
-        self._cost = cost
+        self._path = path
 
     @property
     def item_id(self):
@@ -26,5 +26,5 @@ class CacheLine:
         return self._op
 
     @property
-    def cost(self):
-        return self._cost
+    def path(self):
+        return self._path
