@@ -68,7 +68,7 @@ class LRU(Cache):
         evict one cacheline from the cache
 
         :param **kwargs:
-        :return: id of evicted cacheline
+        :return: id and the evicted cache Req item 
         """
 
         req_item = self.cacheline_dict.popitem(last=False)
