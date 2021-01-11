@@ -8,7 +8,7 @@ this module contains the Req class, which describes a request
 
 
 class Req:
-    def __init__(self, item_id, size=1, op=None, cost=-1, **kwargs):
+    def __init__(self, item_id, size=1, op=None, path=-1, **kwargs):
         self._item_id = item_id
         self._size = size
         self._op = op
